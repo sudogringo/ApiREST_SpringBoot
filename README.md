@@ -70,16 +70,16 @@ Para acceder a la consola de la base de datos H2, sigue estos pasos:
 ## Capturas de Pantalla
 
 *   Prueba exitosa de POST (creando producto)
-![Post](media/H2.png)
+![Post](media/apiPOST.png)
 *   Prueba de GET (listando productos y por categoría)
-![Get](media/H2.png)
-![GetCat](media/H2.png)
+![Get](media/apiGET.png)
+![GetCat](media/apiGetCat.png)
 *   Error 404 cuando el producto no existe
-![GetId](media/H2.png)
-![Get404](media/H2.png)
+![GetId](media/apiGetId.png)
+![Get404](media/apiGetId404.png)
 *   Modificacion de datos
-![Put](media/H2.png)
-![Patch](media/H2.png)
+![Put](media/apiPutId.png)
+![Patch](media/apiPatch.png)
 *   Borrado de producto
 ![Delete](media/apiDelete.png)
 *   Consola H2 mostrando los datos persistidos
