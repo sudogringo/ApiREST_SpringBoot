@@ -1,5 +1,7 @@
 package com.utn.productos_api.service;
 
+import com.utn.productos_api.exception.ProductoNotFoundException;
+import com.utn.productos_api.exception.StockInsuficienteException;
 import com.utn.productos_api.model.Categoria;
 import com.utn.productos_api.model.Producto;
 import com.utn.productos_api.repository.ProductoRepository;
@@ -42,19 +44,25 @@ public class ProductoService {
                     producto.setCategoria(productoActualizado.getCategoria());
                     return productoRepository.save(producto);
                 })
-                .orElse(null);
+                .orElseThrow(() -> new ProductoNotFoundException("Producto no encontrado con id: " + id));
     }
 
     public Producto actualizarStock(Long id, Integer nuevoStock) {
+        if (nuevoStock < 0) {
+            throw new StockInsuficienteException("El stock no puede ser negativo");
+        }
         return productoRepository.findById(id)
                 .map(producto -> {
                     producto.setStock(nuevoStock);
                     return productoRepository.save(producto);
                 })
-                .orElse(null);
+                .orElseThrow(() -> new ProductoNotFoundException("Producto no encontrado con id: " + id));
     }
 
     public void eliminarProducto(Long id) {
+        if (!productoRepository.existsById(id)) {
+            throw new ProductoNotFoundException("Producto no encontrado con id: " + id);
+        }
         productoRepository.deleteById(id);
     }
 }

@@ -45,10 +45,10 @@ public class ProductoController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ProductoResponseDTO> obtenerPorId(@PathVariable Long id) {
-        return productoService.obtenerPorId(id)
-                .map(producto -> modelMapper.map(producto, ProductoResponseDTO.class))
-                .map(response -> new ResponseEntity<>(response, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        Producto producto = productoService.obtenerPorId(id)
+                .orElseThrow(() -> new com.utn.productos_api.exception.ProductoNotFoundException("Producto no encontrado con id: " + id));
+        ProductoResponseDTO response = modelMapper.map(producto, ProductoResponseDTO.class);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/categoria/{categoria}")
@@ -64,23 +64,15 @@ public class ProductoController {
     public ResponseEntity<ProductoResponseDTO> actualizarProducto(@PathVariable Long id, @Valid @RequestBody ProductoDTO productoDTO) {
         Producto productoActualizado = modelMapper.map(productoDTO, Producto.class);
         Producto producto = productoService.actualizarProducto(id, productoActualizado);
-        if (producto != null) {
-            ProductoResponseDTO response = modelMapper.map(producto, ProductoResponseDTO.class);
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        ProductoResponseDTO response = modelMapper.map(producto, ProductoResponseDTO.class);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PatchMapping("/{id}/stock")
     public ResponseEntity<ProductoResponseDTO> actualizarStock(@PathVariable Long id, @Valid @RequestBody ActualizarStockDTO actualizarStockDTO) {
         Producto producto = productoService.actualizarStock(id, actualizarStockDTO.getStock());
-        if (producto != null) {
-            ProductoResponseDTO response = modelMapper.map(producto, ProductoResponseDTO.class);
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        ProductoResponseDTO response = modelMapper.map(producto, ProductoResponseDTO.class);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
